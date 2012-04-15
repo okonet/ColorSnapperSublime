@@ -1,0 +1,6 @@
+{
+    "path"          :  "~/Downloads/ColorSnapper.app/Contents/MacOS/ColorSnapper cli", // Change if you have installed ColorSnapper not in /Applications
+    "format"        : "cssHEXUpper", // Remove to use ColorSnapper settings
+    "autoFormat"    : true
+    // "magnification" : 1 // Should be between 1 and 9. Remove to use ColorSnapper's settings.
+}
