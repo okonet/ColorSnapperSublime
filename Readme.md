@@ -8,7 +8,7 @@ Installation
 
 You can install this package by running the following in your `Packages`:
 
-    git clone git://github.com/okonet/ColorSnapper.git
+    git clone git://github.com/okonet/ColorSnapperSublime.git
 
 License
 =======
