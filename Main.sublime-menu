@@ -1,0 +1,12 @@
+[
+    {
+        "id": "tools",
+        "children":
+        [
+            {
+                "command": "pick_with_color_snapper",
+                "caption": "Pick color using ColorSnapper..."
+            }
+        ]
+    }
+]
