@@ -4,6 +4,7 @@ About
 A Sublime Text 2 plugin for picking colors using ColorSnapper app (http://colorsnapper.com).
 
 Requirements:
+
 * Mac with Mac OS X 10.6+
 * ColorSnapper 1.0.7+ (buy from Mac App Store: http://itunes.apple.com/app/colorsnapper/id418176775?mt=12)
 
