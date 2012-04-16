@@ -1,0 +1,3 @@
+[
+    { "keys": ["super+alt+c"], "command": "pick_with_color_snapper" }
+]
