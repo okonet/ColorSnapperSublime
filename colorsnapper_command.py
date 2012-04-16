@@ -12,16 +12,46 @@ class PickWithColorSnapperCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         format = False
+        word = False
         view = self.view
         self.settings = sublime.load_settings('ColorSnapper.sublime-settings')
 
         # Determine in which format to pick
         if self.settings.get('autoFormat'):
+            # Get selections
             sel = view.sel()
             if len(sel) > 0:
-                selected = view.substr(view.word(sel[0])).strip()
-                if (selected.startswith('#')):
-                    format = 'cssHEXUpper'
+                if len(sel[0]) > 0: # If selection contains more than 1 symbol we will not modify it
+                    format = self.recognize_format(view.substr(sel[0]).strip())
+                else: # otherwise
+                    # Expand selection to brackets if any
+                    view.run_command('expand_selection', {'to': 'brackets'})
+                    # and when expand selection to include brackets
+                    view.run_command('expand_selection', {'to': 'brackets'})
+                    brackets_sel = view.sel()[0]
+                    brackets_str = view.substr(brackets_sel).strip()
+                    if len(brackets_str) > 0: # if there selected text in it it probably one of a complex formats. Let's check for it
+                        format = self.recognize_format(brackets_str)
+                        if not format: # it's not NSColor or UIColor
+                            brackets_reg = sublime.Region(brackets_sel.a - 3, brackets_sel.b)
+                            format = self.recognize_from_region(brackets_reg)
+                            if not format: # it's also not rgb or hsl
+                                brackets_reg = sublime.Region(brackets_sel.a - 4, brackets_sel.b)
+                                format = self.recognize_from_region(brackets_reg)
+                            else:
+                                word = brackets_reg
+                        else:
+                            word = brackets_sel
+                    else: # otherwise let's try HEX
+                        word = view.word(sel[0]) # select a word
+                        if self.is_valid_hex_color(view.substr(word).strip()):
+                            if view.substr(word.a - 1) == '#':
+                                format = 'cssHEXUpper'
+                                word = sublime.Region(word.a - 1, word.b)
+                            else:
+                                format = 'hex'
+                        else:
+                            word = False # Reset word so nothing will be replaced
 
         # Pick a color
         color = self.run_color_picker(format)
@@ -30,17 +60,38 @@ class PickWithColorSnapperCommand(sublime_plugin.TextCommand):
         if color:
             # For each selected region
             for region in view.sel():
-                # get a word from region
-                word = view.word(region)
-                # see if it's a color in HEX format and if it starts with #
-                if self.is_valid_hex_color(view.substr(word)) and view.substr(word.a - 1) == '#':
-                    # increase selection to include '#'
-                    word = sublime.Region(word.a - 1, word.b)
+                if word:
                     # and replace it with picked color
                     view.replace(edit, word, str(color))
                 else:
                     # otherwise just replace selection
                     view.replace(edit, region, str(color))
+
+    def recognize_from_region(self, region):
+        string = self.view.substr(region).strip()
+        return self.recognize_format(string)
+
+    def recognize_format(self, string):
+        if string.startswith('#'):
+            return 'cssHEXUpper'
+        elif string.startswith('[NSColor colorWithCalibratedRed'):
+            return 'nscolorRGB'
+        elif string.startswith('[NSColor colorWithCalibratedHue'):
+            return 'nscolorHSL'
+        elif string.startswith('[UIColor colorWithRed'):
+            return 'uicolorRGB'
+        elif string.startswith('[UIColor colorWithHue'):
+            return 'uicolorHSL'
+        elif string.startswith('rgba'):
+            return 'cssRGBA255'
+        elif string.startswith('hsla'):
+            return 'cssHLSA'
+        elif string.startswith('rgb'):
+            return 'cssRGB255'
+        elif string.startswith('hsl'):
+            return 'cssHLS'
+        else:
+            return False
 
     def run_color_picker(self, format):
         args = str(self.settings.get("path"))
