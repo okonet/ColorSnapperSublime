@@ -27,12 +27,9 @@ class PickWithColorSnapperCommand(sublime_plugin.TextCommand):
                 else: # otherwise
                     # let's try HEX firstly
                     word = view.word(sel[0]) # select a word
-                    if self.is_valid_hex_color(view.substr(word).strip()):
-                        if view.substr(word.a - 1) == '#':
-                            format = 'cssHEXUpper'
-                            word = sublime.Region(word.a - 1, word.b)
-                        else:
-                            format = 'hex'
+                    if self.is_valid_hex_color(view.substr(word).strip()) and view.substr(word.a - 1) == '#':
+                        format = 'cssHEXUpper'
+                        word = sublime.Region(word.a - 1, word.b)
                     else:
                         # Expand selection to brackets if any
                         view.run_command('expand_selection', {'to': 'brackets', 'brackets': '[,('})
