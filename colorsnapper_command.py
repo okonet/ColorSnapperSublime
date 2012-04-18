@@ -28,7 +28,10 @@ class PickWithColorSnapperCommand(sublime_plugin.TextCommand):
                     # let's try HEX firstly
                     word = view.word(sel[0]) # select a word
                     if self.is_valid_hex_color(view.substr(word).strip()) and view.substr(word.a - 1) == '#':
-                        format = 'cssHEXUpper'
+                        if self.settings.has("upperCaseHEX") and self.settings.get("upperCaseHEX"):
+                            format = 'cssHEXUpper'
+                        else:
+                            format = 'cssHEX'
                         word = sublime.Region(word.a - 1, word.b)
                     else:
                         # Expand selection to brackets if any
@@ -99,12 +102,12 @@ class PickWithColorSnapperCommand(sublime_plugin.TextCommand):
     def run_color_picker(self, format):
         args = str(self.settings.get("path"))
         if not format:
-            if self.settings.has("format"):
-                args += ' --format ' + str(self.settings.get("format"))
+            if self.settings.has("defaultFormat"):
+                args += ' --format ' + str(self.settings.get("defaultFormat"))
         else:
             args += ' --format ' + str(format)
 
-        if self.settings.has("magnification"):
+        if self.settings.has("magnification") and self.settings.get("magnification") != 0:
             args += ' -m ' + str(self.settings.get("magnification"))
 
         try:
