@@ -1,7 +1,7 @@
 {
-    "path"          :  "~/Downloads/ColorSnapper.app/Contents/MacOS/ColorSnapper cli", // Change if you have installed ColorSnapper not in /Applications
+    "path"          :  "/Applications/ColorSnapper.app/Contents/MacOS/ColorSnapper cli", // Change if you have installed ColorSnapper not in /Applications
     "autoFormat"    : true, // Plugin will attempt to get a correct format from selection and use it for picked
     "defaultFormat" : "cssHEXUpper", // Remove to use ColorSnapper settings
-    "upperCaseHEX"  : false, // Uppercase HEX when using auto-recognition
+    "upperCaseHEX"  : true, // Uppercase HEX when using auto-recognition
     "magnification" : 0 // Should be between 1 and 9. Remove or set to 0 to use ColorSnapper's settings.
 }
