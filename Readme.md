@@ -6,7 +6,7 @@ A Sublime Text 2 plugin for picking colors using ColorSnapper app (http://colors
 Requirements:
 
 * Mac with Mac OS X 10.6+
-* ColorSnapper 1.0.7+ (buy from Mac App Store: http://itunes.apple.com/app/colorsnapper/id418176775?mt=12)
+* Installed version of ColorSnapper (2.0+) (buy from Mac App Store: http://itunes.apple.com/app/colorsnapper/id418176775?mt=12)
 
 Installation
 ============
@@ -22,9 +22,10 @@ Options
 Settings are located in ColorSnapper.sublime-settings inside plugin directory and include:
 
 * path -- Path to ColorSnapper executable. Usually it shouldn't be changed from default.
-* autoFormat -- if true, plugin will attempt to get a correct format from selection and use it for picked color
-* format -- Default format to fall back if it wasn't recognized from selection. Remove to use ColorSnapper app settings
-* magnification -- Magnification level of picker. Remove to use ColorSnapper app settings
+* autoFormat -- if true, plugin will attempt to get a correct format from cursor position and use it for picked color
+* upperCaseHEX -- true to use upper case for HEX formats (only using with autoFormat)
+* format -- Default format to fall back if it wasn't recognized. Remove to use ColorSnapper app settings
+* magnification -- Magnification level of picker. Remove or set to 0 to use ColorSnapper app settings
 
 License
 =======
